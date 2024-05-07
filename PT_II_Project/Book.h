@@ -8,16 +8,18 @@ class Book {
 private:
 	string bookID;
 	string Title;
-	long ISBN;
+	string ISBN;
 
 public:
+	Book(string, string, string);
+
 	void setBookID(string);
 	void setTitle(string);
-	void setISBN(long);
+	void setISBN(string);
 
 	string getBookID() const;
 	string getTitle() const;
-	long getISBN() const;
+	string getISBN() const;
 };
 
 

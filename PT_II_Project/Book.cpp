@@ -3,6 +3,12 @@
 
 using namespace std;
 
+Book::Book(string id_0, string title_0, string isbn_0) {
+	bookID = id_0;
+	Title = title_0;
+	ISBN = isbn_0;
+}
+
 void Book::setBookID(string inputID) {
 	bookID = inputID;
 }
@@ -11,7 +17,7 @@ void Book::setTitle(string inputTitle) {
 	Title = inputTitle;
 }
 
-void Book::setISBN(long inputISBN) {
+void Book::setISBN(string inputISBN) {
 	ISBN = inputISBN;
 }
 
@@ -23,6 +29,6 @@ string Book::getTitle() const {
 	return Title;
 }
 
-long Book::getISBN() const {
+string Book::getISBN() const {
 	return ISBN;
 }

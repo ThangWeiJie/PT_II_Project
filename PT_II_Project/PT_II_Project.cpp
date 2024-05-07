@@ -1,15 +1,48 @@
 #include <iostream>
 #include <fstream>
-#include <iomanip>
+#include <vector>
 #include <stdlib.h>
 #include "Book.h"
 using namespace std;
 
-void userFunction() {
+void bookList() {
 	system("cls");
+	string inputID, inputTitle, inputISBN;
 
 	fstream inFile;
 	inFile.open("database.txt");
+
+	vector<string> bookIDDatabase;
+	vector<string> bookTitleDatabase;
+	vector<string> isbnDatabase;
+	vector<Book> bookObjectVector;
+
+	if (!inFile.is_open()) {cout << "Database error. Please try again later.";}
+
+	while (!inFile.eof()) {
+		getline(inFile, inputID, ',');
+		bookIDDatabase.push_back(inputID);
+
+		getline(inFile, inputTitle, ',');
+		bookTitleDatabase.push_back(inputTitle);
+
+		getline(inFile, inputISBN);
+		isbnDatabase.push_back(inputISBN);
+	}
+
+	for (size_t i = 0; i < bookIDDatabase.size(); i++) {
+		Book placeholder(bookIDDatabase[i], bookTitleDatabase[i], isbnDatabase[i]);
+		bookObjectVector.push_back(placeholder);
+	}
+
+	Book exElement = bookObjectVector[0];
+	cout << exElement.getBookID() << exElement.getTitle() << exElement.getISBN();
+
+	inFile.close();
+}
+
+void userFunction() {
+	system("cls");
 
 	int userAction;
 	cout << "\t\tMenu" << endl;
@@ -21,7 +54,13 @@ void userFunction() {
 	cout << "Enter action: ";
 	cin >> userAction;
 
-	cout << "Just a test";
+	switch (userAction)
+	{
+	case 1:
+		bookList();
+	default:
+		break;
+	}
 }
 
 void adminFunction() {
