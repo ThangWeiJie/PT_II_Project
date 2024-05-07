@@ -21,7 +21,7 @@ void userFunction() {
 	cout << "Enter action: ";
 	cin >> userAction;
 
-	
+	cout << "Just a test";
 }
 
 void adminFunction() {
