@@ -20,10 +20,10 @@ void bookList() {
 	if (!inFile.is_open()) {cout << "Database error. Please try again later.";}
 
 	while (!inFile.eof()) {
-		getline(inFile, inputID, ',');
+		getline(inFile, inputID, '\t');
 		bookIDDatabase.push_back(inputID);
 
-		getline(inFile, inputTitle, ',');
+		getline(inFile, inputTitle, '\t');
 		bookTitleDatabase.push_back(inputTitle);
 
 		getline(inFile, inputISBN);
