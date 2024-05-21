@@ -20,6 +20,8 @@ public:
 	string getBookID() const;
 	string getTitle() const;
 	string getISBN() const;
+
+	~Book() {};
 };
 
 
