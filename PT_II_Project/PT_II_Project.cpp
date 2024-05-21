@@ -58,6 +58,13 @@ void userFunction() {
 	{
 	case 1:
 		bookList();
+		break;
+	case 2:
+		cout << "WIP";
+		break;
+	case 3:
+		cout << "WIP";
+		break;
 	default:
 		break;
 	}
