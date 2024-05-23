@@ -1,2 +1,41 @@
-#F-1  Zelle: An Occult Adventure  459090
-#F-2  ABC  450909
+#A0000001	Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones	9780735211292
+#A0000002	Allegedly	9780062422651
+#A0000003	All I Need (The Knights Series)	9798990321915
+#B0000001	B.E.B.O.	9798325247941
+#C0000001	C Programming Absolute Beginner's Guide	9780789751980
+#C0000002	C# & C++: 5 Books in 1 - The #1 Coding Course from Beginner to Advanced (2024) (Computer Programming)	9798390090077
+#D0000001	D&D Player’s Handbook (Dungeons & Dragons Core Rulebook)	9780786965601
+#D0000002	D&D 5E: Original Adventures Reincarnated #7: Dark Tower	9781956449501
+#D0000003	D'Aulaires' Book of Norse Myths	9781681377889
+#D0000004	D'aulaire's Book of Greek Myths	9780385015837
+#E0000001	Effective C: An Introduction to Professional C Programming	9781718501041
+#E0000002	E. E. Cummings: Complete Poems, 1904–1962	9781631490415
+#E0000003	E.M. Bounds on Prayer	9780883684160
+#F0000001	Fluent C: Principles, Practices, and Patterns	9781492097334
+#F0000002	F Word: Coloring Book for Adults	9798323601912
+#F0000003	F is for Friends: An Alphabet Book (Funko Pop!)	9780593808993
+#H0000001	Hidden Thorns (Knights of the Gleam)	9798988977612
+#H0000002	Hillbilly Elegy: A Memoir of a Family and Culture in Crisis	9780062300553
+#H0000003	Haunting Adeline (Cat and Mouse Duet)	9798454848842
+#I0000001	I'd Still Choose You: A Young Widow's Journey of Unconditional Love, Deep Grief, and Life After Loss	9798989996407
+#I0000002	Initial D Omnibus 1 (Vol. 1-2)	9798888770986
+#I0000003	In the Language of Adam: Reading Scripture Like The Book of Mormon's Visionary Men	9798990412002
+#J0000001	Junie B., First Grader: Aloha-ha-ha! (Junie B. Jones, No. 26)	9780375834042
+#J0000002	Joyride	9798990292017
+#M0000001	Make It in Showbiz: Life Behind the Scenes	9781835561294
+#M0000002	Manual D - Residential Duct Systems	9781892765437
+#M0000003	Man's Search for Meaning	9780807014271
+#O0000001	Once Upon a Time: The Captivating Life of Carolyn Bessette-Kennedy	9781982178963
+#R0000001	Robert E. Lee and Me	9781250239280
+#R0000002	Refire	9798323127832
+#S0000001	Stuart Little	9780064400565
+#T0000001	The Women: A Novel	9781250178633
+#T0000002	Therapist	9781250784056
+#T0000003	The Gathering: A Novel	9780593356593
+#T0000004	The Fifth Victim (FBI Task Force S.W.O.R.D.)	9798321154250
+#T0000005	The Council of Athyzia: A Fantasy Novel of Politics and Magic (The Athyziad)	9798989936014
+#U0000001	Un-Cancel Robert E. Lee: An Open Letter to the Trustees of Washington and Lee University	9798888454855
+#V0000001	Vampire Hunter D Omnibus: Book One	9781506725307
+#W0000001	What This Comedian Said Will Shock You	9781668051351
+#Y0000001	You'd Be Home Now	9780525708070
+#$0000001	5 Ingredients Mediterranean: Simple Incredible Food [American Measurements]	9781250319852
