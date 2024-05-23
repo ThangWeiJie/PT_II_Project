@@ -5,38 +5,27 @@
 #include "Book.h"
 using namespace std;
 
-void bookList() {
+void bootSystem(vector<Book> & bookVector) {
 	system("cls");
-	string inputID, inputTitle, inputISBN;
-
 	fstream inFile;
 	inFile.open("database.txt");
 
-	vector<string> bookIDDatabase;
-	vector<string> bookTitleDatabase;
-	vector<string> isbnDatabase;
-	vector<Book> bookObjectVector;
-
-	if (!inFile.is_open()) {cout << "Database error. Please try again later.";}
-
-	while (!inFile.eof()) {
-		getline(inFile, inputID, '\t');
-		bookIDDatabase.push_back(inputID);
-
-		getline(inFile, inputTitle, '\t');
-		bookTitleDatabase.push_back(inputTitle);
-
-		getline(inFile, inputISBN);
-		isbnDatabase.push_back(inputISBN);
+	if(!inFile.is_open()){
+		cout << "Database error. Please try again later.";
+		exit(1);
 	}
+	else	{cout << "Loading Book List..." << endl;}
 
-	for (size_t i = 0; i < bookIDDatabase.size(); i++) {
-		Book placeholder(bookIDDatabase[i], bookTitleDatabase[i], isbnDatabase[i]);
-		bookObjectVector.push_back(placeholder);
+	for(int i=0; !inFile.eof();i++){
+		Book bookHolder;
+		getline(inFile, bookHolder.bookID, '\t');
+
+		getline(inFile, bookHolder.Title, '\t');
+
+		getline(inFile, bookHolder.ISBN);
+		
+		bookVector.push_back(bookHolder);
 	}
-
-	Book exElement = bookObjectVector[0];
-	cout << exElement.getBookID() << exElement.getTitle() << exElement.getISBN();
 
 	inFile.close();
 }
@@ -77,8 +66,11 @@ void adminFunction() {
 
 int main()
 {
+	vector<Book> bookVector={};
 	int actionNum;
 
+	bootSystem(bookVector);
+	
 	cout << "ABC Library System" << endl;
 	cout << "Please select an action: 1. Login as user" << endl;
 	cout << "                         2. Login as admin" << endl;
