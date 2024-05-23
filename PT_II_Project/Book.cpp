@@ -3,7 +3,10 @@
 
 using namespace std;
 
-Book::Book(string id_0, string title_0, string isbn_0) {
+Book::Book(){
+	bookID = Title = ISBN = '';
+}
+Book::Book(string id_0="", string title_0="", string isbn_0="") {
 	bookID = id_0;
 	Title = title_0;
 	ISBN = isbn_0;

@@ -11,6 +11,7 @@ private:
 	string ISBN;
 
 public:
+	Book();
 	Book(string, string, string);
 
 	void setBookID(string);
@@ -20,6 +21,8 @@ public:
 	string getBookID() const;
 	string getTitle() const;
 	string getISBN() const;
+
+	friend void bootSystem(vector<Book>&);
 
 	~Book() {};
 };
