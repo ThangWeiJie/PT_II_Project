@@ -4,12 +4,12 @@
 #B0000001	B.E.B.O.	9798325247941
 #C0000001	C Programming Absolute Beginner's Guide	9780789751980
 #C0000002	C# & C++: 5 Books in 1 - The #1 Coding Course from Beginner to Advanced (2024) (Computer Programming)	9798390090077
-#D0000001	D&D Player’s Handbook (Dungeons & Dragons Core Rulebook)	9780786965601
+#D0000001	D&D Player's Handbook (Dungeons & Dragons Core Rulebook)	9780786965601
 #D0000002	D&D 5E: Original Adventures Reincarnated #7: Dark Tower	9781956449501
 #D0000003	D'Aulaires' Book of Norse Myths	9781681377889
 #D0000004	D'aulaire's Book of Greek Myths	9780385015837
 #E0000001	Effective C: An Introduction to Professional C Programming	9781718501041
-#E0000002	E. E. Cummings: Complete Poems, 1904–1962	9781631490415
+#E0000002	E. E. Cummings: Complete Poems, 1904-1962	9781631490415
 #E0000003	E.M. Bounds on Prayer	9780883684160
 #F0000001	Fluent C: Principles, Practices, and Patterns	9781492097334
 #F0000002	F Word: Coloring Book for Adults	9798323601912

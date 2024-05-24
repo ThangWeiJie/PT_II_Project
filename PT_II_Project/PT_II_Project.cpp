@@ -3,10 +3,11 @@
 #include <vector>
 #include <stdlib.h>
 #include "Book.h"
+#include "searchBook.h"
 using namespace std;
 
 //bootSystem initialize bookvector and uservector from database in the main function
-void bootSystem(vector<Book> & bookVector) {
+void bootSystem(vector<Book> &bookVector) {
 	system("cls");
 	fstream inFile;
 	inFile.open("database.txt");
@@ -32,42 +33,53 @@ void bootSystem(vector<Book> & bookVector) {
 }
 
 //User function 1. Search for books
-void searchBook(){
-	system("cls");
-	cout << "Search result";
-}
+//void searchBook(){
+//	system("cls");
+//	cout << "Search result";
+//}
 
 //Show user menu
-void userFunction() {
-	system("cls");
+int userFunction(vector<Book> &bookVector) {
+	do{
+		system("cls");
 
-	int userAction;
-	cout << "\t\tUser Menu" << endl;
+		int userAction;
+		cout << "\t\tUser Menu" << endl;
 
-	cout << "\t1. Search for books\n";
-	cout << "\t2. Borrow books\n";
-	cout << "\t3. Reservation\n";
-	cout << "\t4. Check status\n\n";
-	cout << "Enter action: ";
-	cin >> userAction;
+		cout << "\t1. Search for books\n";
+		cout << "\t2. Borrow books\n";
+		cout << "\t3. Reservation\n";
+		cout << "\t4. Check status\n";
+		cout << "\t5. Logout\n\n";
+		cout << "Enter action: ";
+		cin >> userAction;
 
-	switch (userAction)
-	{
-	case 1:
-		searchBook();
-		break;
-	case 2:
-		cout << "WIP" << endl;
-		break;
-	case 3:
-		cout << "WIP" << endl;
-		break;
-	case 4:
-		cout << "WIP" << endl;
-		break;
-	default:
-		break;
-	}
+		switch (userAction)
+		{
+		case 1:
+			searchBook(bookVector);
+			break;
+		case 2:
+			cout << "WIP" << endl;
+			break;
+		case 3:
+			cout << "WIP" << endl;
+			break;
+		case 4:
+			cout << "WIP" << endl;
+			break;
+		case 5:
+			cout << "Successfully logout..." << endl;
+			system("pause");
+			return 0;
+		default:
+			cout << "Please enter number between 1-5" << endl;
+			system("pause");
+			break;
+		}
+
+	}while(true);
+	return 0;
 }
 
 
@@ -79,7 +91,7 @@ void adminFunction() {
 
 int main()
 {
-	vector<Book> bookVector={};
+	vector<Book> bookVector;
 	int actionNum;
 
 	bootSystem(bookVector);
@@ -96,7 +108,7 @@ int main()
 		switch (actionNum)
 		{
 			case 1:
-				userFunction();
+				userFunction(bookVector);
 				break;
 			case 2:
 				adminFunction();
@@ -105,6 +117,7 @@ int main()
 				return 0;
 			default:
 				cout << "Please enter number between 1-3" << endl;
+				system("pause");
 				break;
 		}
 	}while(true);

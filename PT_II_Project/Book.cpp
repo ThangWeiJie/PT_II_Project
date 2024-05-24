@@ -4,7 +4,7 @@
 using namespace std;
 
 Book::Book(){
-	bookID = Title = ISBN = '';
+	bookID = Title = ISBN = "";
 }
 Book::Book(string id_0="", string title_0="", string isbn_0="") {
 	bookID = id_0;
@@ -34,4 +34,20 @@ string Book::getTitle() const {
 
 string Book::getISBN() const {
 	return ISBN;
+}
+
+string Book::toUpper(string str){
+    string tempStr="";
+    for(int i=0;i<str.length();i++){
+        tempStr+=toupper(str[i]);
+    }
+    return tempStr;
+}
+
+bool Book::operator==(string search){
+	search = toUpper(search);
+	if((bookID.find(search)>=0) && (bookID.find(search)<bookID.length()))	return true;
+	if((toUpper(Title).find(search)>=0) && (toUpper(Title).find(search)<Title.length()))	return true;
+	if((toUpper(ISBN).find(search)>=0) && (toUpper(ISBN).find(search)<ISBN.length()))	return true;
+	return false;
 }
