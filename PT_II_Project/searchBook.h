@@ -37,37 +37,17 @@ void showSearchResult(vector<Book> result){
 }
 
 void searchBook(vector<Book> books){
-    string userSearch = "";
-    int userAction = 0;
-    bool _back = false;
+    system("cls");
+    string userSearch = "Pr";
     vector<Book> booksMatched;
-    do{
-        system("cls");
 
-        for(int i=0;i<books.size();i++){
-            if(books[i] == userSearch)  booksMatched.push_back(books[i]);
-        }
-        showSearchResult(booksMatched);
-        booksMatched.clear();
-        cout << "\nSelect action:(1. Search book / 2. Borrow book / 3. Back to user menu) " << endl;
-        cin >> userAction;
-        switch(userAction){
-            case 1:
-                cout << "\nSearch by Book Title, Author or ISBN: ";
-                cin.ignore();
-                getline(cin,userSearch);
-                break;
-            case 2:
-                cout << "\nSelect your desired book no.:(1-10) ";
-                break;
-            case 3:
-                _back = true;
-                break;
-            default:
-                cout << "Please enter number between 1-3" << endl;
-                system("pause");
-                break;
-        }
-    }while(!_back);
-        system("pause");
+    for(int i=0;i<books.size();i++){
+        if(books[i] == userSearch)  booksMatched.push_back(books[i]);
+    }
+    showSearchResult(booksMatched);
+    cout << "Search by Book Title, Author or ISBN: ";
+    cin.ignore();
+    getline(cin,userSearch);
+
+    system("pause");
 }
