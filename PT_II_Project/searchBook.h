@@ -17,7 +17,7 @@ void showSearchResult(vector<Book> result){
     cout << right << setw(5) << "No" << " |" << setw(7) << "ID" << setw(6) << "|" << setw(38) << "Title" << setw(33) << "|" << setw(8) << "ISBN" << endl;
     cout << borderLine();
 
-    for(int i=0;i<result.size()&&i<MAX_RESULT_READ;i++){
+    for(int i=0;i<result.size()&&i<MAX_RESULT_READ;i++){ 
         string titleL0 = result[i].getTitle();
         string titleL1 = " ";
         if(titleL0.length()>70){
@@ -38,7 +38,7 @@ void showSearchResult(vector<Book> result){
 
 void searchBook(vector<Book> books){
     system("cls");
-    string userSearch = "Pr";
+    string userSearch = "";
     vector<Book> booksMatched;
 
     for(int i=0;i<books.size();i++){

@@ -18,7 +18,7 @@ void bootSystem(vector<Book> &bookVector) {
 	}
 	else	{cout << "Loading Book List..." << endl;}
 
-	for(int i=0;!inFile.eof();i++){
+	for(int i=0; !inFile.eof(); i++){
 		Book bookHolder;
 		getline(inFile, bookHolder.bookID, '\t');
 
@@ -82,11 +82,44 @@ int userFunction(vector<Book> &bookVector) {
 	return 0;
 }
 
+void addBook(vector<Book> &bookVector) {
+
+	fstream inFile;
+	inFile.open("database.txt", ios_base::app);
+
+	string newID;
+	string newTitle;
+	string newISBN;
+
+	cout << "Enter ID of new book: ";
+	cin >> newID;
+	cin.ignore();
+
+	cout << "Enter title of new book: ";
+	getline(cin, newTitle);
+
+	cout << "Enter ISBN of new book: ";
+	cin >> newISBN;
+
+	Book newBook(newID, newTitle, newISBN);
+	bookVector.push_back(newBook);
+
+	inFile << "\n" << newBook.getBookID() << "\t" << newBook.getTitle() << "\t" << newBook.getISBN();
+}
+
+void deleteBook(vector<Book>& bookVector) {
+	
+}
+
 
 
 void adminFunction() {
 	system("cls");
 	cout << "\t\tAdmin Menu" << endl;
+
+	vector<Book> bookVector;
+
+	addBook(bookVector);
 }
 
 int main()
