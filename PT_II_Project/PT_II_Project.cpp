@@ -108,7 +108,7 @@ void addBook(vector<Book> &bookVector) {
 }
 
 void deleteBook(vector<Book>& bookVector) {
-	
+  cout << "WIP" << endl;
 }
 
 
