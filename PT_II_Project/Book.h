@@ -10,6 +10,7 @@ private:
 	string bookID;
 	string Title;
 	string ISBN;
+	int copyInStock， totalCopy;
 
 public:
 	//Constructors
