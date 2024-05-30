@@ -7,6 +7,7 @@
 using namespace std;
 
 const int MAX_RESULT_READ = 10;
+const int MAX_TITLEchr_perROW = 70;
 
 string borderLine(){
     return (string(110,'-')+"\n");
@@ -14,7 +15,7 @@ string borderLine(){
 
 string pop(string &str,int i){
     string temp;
-    temp = str.substr(i,70);
+    temp = str.substr(i,MAX_TITLEchr_perROW);
     str.erase(i);
     return temp;
 }
@@ -25,11 +26,11 @@ void showSearchResult(vector<Book> result, int p){
     cout << right << setw(5) << "No" << " |" << setw(7) << "ID" << setw(6) << "|" << setw(38) << "Title" << setw(33) << "|" << setw(8) << "ISBN" << endl;
     cout << borderLine();
 
-    for(int i=0+(p*10);(i<result.size())&&(i<MAX_RESULT_READ+(p*10));i++){
+    for(int i=(p*10);(i<result.size())&&(i<MAX_RESULT_READ+(p*10));i++){
         string titleL0 = result[i].getTitle();
         string titleL1 = " ";
-        if(titleL0.length()>70){
-            for(int j=70;j>0;j--){
+        if(titleL0.length()>MAX_TITLEchr_perROW){
+            for(int j=MAX_TITLEchr_perROW;j>0;j--){
                 if(!isalpha(titleL0[j])){
                     titleL1 = pop(titleL0, j);
                     break;
@@ -37,8 +38,8 @@ void showSearchResult(vector<Book> result, int p){
             }
         }
 
-        cout << right << setw(5) << i+1 << ".| " << left << setw(11) << result[i].getBookID()  << "|" << setw(70) << titleL0 << "| "  << result[i].getISBN() << endl;
-        cout << setw(6) << " " << "|" << setw(12) << " " << "|" << setw(70) << titleL1 << "| " << endl;
+        cout << right << setw(5) << i+1 << ".| " << left << setw(11) << result[i].getBookID()  << "|" << setw(MAX_TITLEchr_perROW) << titleL0 << "| "  << result[i].getISBN() << endl;
+        cout << setw(6) << " " << "|" << setw(12) << " " << "|" << setw(MAX_TITLEchr_perROW) << titleL1 << "| " << endl;
     }
     cout << borderLine();
 }
@@ -65,7 +66,7 @@ void searchBook(vector<Book> books){
         cin >> userAction;
         switch(userAction){
             case 1:
-                cout << "\nSearch by Book Title, Author or ISBN: ";
+                cout << "\nSearch by Book ID, Book Title or ISBN: ";
                 cin.ignore();
                 getline(cin,userSearch);
                 page = 0;
