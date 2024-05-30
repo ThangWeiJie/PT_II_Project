@@ -12,6 +12,13 @@ string borderLine(){
     return (string(110,'-')+"\n");
 }
 
+string pop(string &str,int i){
+    string temp;
+    temp = str.substr(i,70);
+    str.erase(i);
+    return temp;
+}
+
 void showSearchResult(vector<Book> result, int p){
     cout << right << setw(50) << "Book List" << endl;
     cout << borderLine();
@@ -24,8 +31,7 @@ void showSearchResult(vector<Book> result, int p){
         if(titleL0.length()>70){
             for(int j=70;j>0;j--){
                 if(!isalpha(titleL0[j])){
-                    titleL1 = titleL0.substr(j,70);
-                    titleL0.erase(j);
+                    titleL1 = pop(titleL0, j);
                     break;
                 }
             }
@@ -39,7 +45,7 @@ void showSearchResult(vector<Book> result, int p){
 
 void searchBook(vector<Book> books){
     string userSearch = "";
-    int userAction = 1, page = 0, totalPage = 0;
+    int userAction = 1, page = 0, totalPage = 0, bookNo;
     bool _back = false;
     vector<Book> booksMatched;
 
@@ -53,9 +59,9 @@ void searchBook(vector<Book> books){
         showSearchResult(booksMatched, page);
 
         cout << "\nSelect action:(1. Search book / 2. Borrow book / ";
-        (page<totalPage-1)? cout << "3. Next page / " : cout << "";
-        (page>0)? cout << "4. Previous page / " : cout << "";
-        cout << "0. Back to user menu) " << endl;
+        if(page<totalPage-1)    cout << "3. Next page / ";
+        if(page>0)  cout << "4. Previous page / ";
+        cout << "0. Back to user menu) " << endl << "=>";
         cin >> userAction;
         switch(userAction){
             case 1:
@@ -65,7 +71,8 @@ void searchBook(vector<Book> books){
                 page = 0;
                 break;
             case 2:
-                cout << "\nSelect your desired book no.:(1- " << booksMatched.size() << ") ";
+                cout << "\nInsert book no.:(1-" << booksMatched.size() << ") =>";
+                cin >> bookNo;
                 break;
             case 3:
                 if(page<totalPage-1) page+=1;
