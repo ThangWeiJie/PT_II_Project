@@ -7,7 +7,7 @@
 using namespace std;
 
 const int MAX_RESULT_READ = 10;
-const int MAX_TITLEchr_perROW = 70;
+const int TITLE_LENGTH_perROW = 63;
 
 string borderLine(){
     return (string(110,'-')+"\n");
@@ -15,22 +15,23 @@ string borderLine(){
 
 string pop(string &str,int i){
     string temp;
-    temp = str.substr(i,MAX_TITLEchr_perROW);
+    temp = str.substr(i,TITLE_LENGTH_perROW);
     str.erase(i);
     return temp;
 }
 
-void showSearchResult(vector<Book> result, int p){
-    cout << right << setw(50) << "Book List" << endl;
+void showSearchResult(vector<Book *> result, int p){
+    cout << right << setw(60) << "Book List" << endl;
     cout << borderLine();
-    cout << right << setw(5) << "No" << " |" << setw(7) << "ID" << setw(6) << "|" << setw(38) << "Title" << setw(33) << "|" << setw(8) << "ISBN" << endl;
+    cout << right << setw(5) << "No" << " |" << setw(6) << "ID" << setw(6) << "|" << setw(TITLE_LENGTH_perROW/2+3) << "Title" << setw(TITLE_LENGTH_perROW/2-1) << "|"
+        << setw(9) << "ISBN" << setw(7) << "|" << setw(8) << "Status" << endl;
     cout << borderLine();
 
     for(int i=(p*10);(i<result.size())&&(i<MAX_RESULT_READ+(p*10));i++){
-        string titleL0 = result[i].getTitle();
+        string titleL0 = result[i]->getTitle();
         string titleL1 = " ";
-        if(titleL0.length()>MAX_TITLEchr_perROW){
-            for(int j=MAX_TITLEchr_perROW;j>0;j--){
+        if(titleL0.length()>TITLE_LENGTH_perROW){
+            for(int j=TITLE_LENGTH_perROW;j>0;j--){
                 if(!isalpha(titleL0[j])){
                     titleL1 = pop(titleL0, j);
                     break;
@@ -38,8 +39,9 @@ void showSearchResult(vector<Book> result, int p){
             }
         }
 
-        cout << right << setw(5) << i+1 << ".| " << left << setw(11) << result[i].getBookID()  << "|" << setw(MAX_TITLEchr_perROW) << titleL0 << "| "  << result[i].getISBN() << endl;
-        cout << setw(6) << " " << "|" << setw(12) << " " << "|" << setw(MAX_TITLEchr_perROW) << titleL1 << "| " << endl;
+        cout << right << setw(5) << i+1 << ".| " << left << setw(10) << result[i]->getBookID()  << "|" << setw(TITLE_LENGTH_perROW) << titleL0 << "| " 
+            << result[i]->getISBN() << " |" << " OutofStock" << endl;
+        cout << right << setw(7) << "|" << setw(12) << "|" << left << setw(TITLE_LENGTH_perROW) << titleL1 << "|               |" << endl;
     }
     cout << borderLine();
 }
@@ -48,21 +50,20 @@ void searchBook(vector<Book> books){
     string userSearch = "";
     int userAction = 1, page = 0, totalPage = 0, bookNo;
     bool _back = false;
-    vector<Book> booksMatched;
+    vector<Book *> booksMatched;
 
     do{
         system("cls");
 
         for(int i=0;i<books.size();i++){
-            if(books[i] == userSearch)  booksMatched.push_back(books[i]);
+            if(books[i] == userSearch)  booksMatched.push_back(&books[i]);
         }
         totalPage = ceil(booksMatched.size()/float(MAX_RESULT_READ));
         showSearchResult(booksMatched, page);
 
-        cout << "\nSelect action:(1. Search book / 2. Borrow book / ";
-        if(page<totalPage-1)    cout << "3. Next page / ";
-        if(page>0)  cout << "4. Previous page / ";
-        cout << "0. Back to user menu) " << endl << "=>";
+        cout << "Searching keyword: " << left << setw(13) << userSearch.substr(0,10)+((userSearch.length()>10)? "...":"") << right << setw(77) << "Page " + to_string(page+1) + "/" + to_string(totalPage) << endl;
+        cout << "\nSelect action:(1. Search book / 2. Borrow book / " << ((page<totalPage-1)? "3. Next page / " : "") 
+             << ((page>0)? "4. Previous page / " : "") << "0. Back to user menu)" << endl << "=>";
         cin >> userAction;
         switch(userAction){
             case 1:
@@ -72,7 +73,7 @@ void searchBook(vector<Book> books){
                 page = 0;
                 break;
             case 2:
-                cout << "\nInsert book no.:(1-" << booksMatched.size() << ") =>";
+                cout << "\nInsert the No. of book:(1-" << booksMatched.size() << ") ";
                 cin >> bookNo;
                 break;
             case 3:

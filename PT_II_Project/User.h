@@ -12,6 +12,6 @@ private:
     Book borrowedBooks;
 public:
 
-}
+};
 
 #endif

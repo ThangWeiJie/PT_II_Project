@@ -3,17 +3,20 @@
 #include <vector>
 #include <stdlib.h>
 #include "Book.h"
+#include "User.h"
+#include "Stock.h"
 #include "searchBook.h"
 using namespace std;
 
-//bootSystem initialize bookvector and uservector from database in the main function
-void bootSystem(vector<Book> &bookVector) {
+//loadBooks initialize bookvector from bookdata.txt
+void loadBooks(vector<Book> &bookVector) {
 	system("cls");
 	fstream inFile;
-	inFile.open("database.txt");
+	inFile.open("bookdata.txt");
 
 	if(!inFile.is_open()){
-		cout << "Database error. Please try again later.";
+		cout << "bookdata error. Please try again later.";
+		getchar();
 		exit(1);
 	}
 	else	{cout << "Loading Book List..." << endl;}
@@ -30,6 +33,19 @@ void bootSystem(vector<Book> &bookVector) {
 	}
 
 	inFile.close();
+}
+
+void loadUsers(){
+	system("cls");
+	fstream inFile;
+	inFile.open("userdata.txt");
+
+	if(!inFile.is_open()){
+		cout << "userdata error. Please try again later.";
+		getchar();
+		exit(1);
+	}
+
 }
 
 //User function 1. Search for books
@@ -85,7 +101,7 @@ int userFunction(vector<Book> &bookVector) {
 void addBook(vector<Book> &bookVector) {
 
 	fstream inFile;
-	inFile.open("database.txt", ios_base::app);
+	inFile.open("bookdata.txt", ios_base::app);
 
 	string newID;
 	string newTitle;
@@ -108,7 +124,7 @@ void addBook(vector<Book> &bookVector) {
 }
 
 void deleteBook(vector<Book>& bookVector) {
-  cout << "WIP" << endl;
+
 }
 
 
@@ -127,7 +143,7 @@ int main()
 	vector<Book> bookVector;
 	int actionNum;
 
-	bootSystem(bookVector);
+	loadBooks(bookVector);
 	
 	do{
 		system("cls");
