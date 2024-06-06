@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Inventory.h"
 using namespace std;
 
 class Book {
@@ -12,15 +13,16 @@ private:
 	string ISBN;
 
 public:
+	Inventory inventory;
 	//Constructors
 	Book();
-	Book(string, string, string);
+	Book(string, string, string, int, int);
 
-	//Accessor
+	//Mutators
 	void setBookID(string);
 	void setTitle(string);
 	void setISBN(string);
-	//Mutator
+	//Accessors
 	string getBookID() const;
 	string getTitle() const;
 	string getISBN() const;
@@ -28,11 +30,11 @@ public:
 	//Functions
 	string toUpper(string);
 
-	//Overloaded operator
+	//Overloaded operators
 	bool operator==(string);
 
 
-	friend void bootSystem(vector<Book>&);
+	friend void loadBooks(vector<Book>&);
 
 	~Book() {};
 };

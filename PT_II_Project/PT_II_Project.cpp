@@ -1,36 +1,95 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <stdlib.h>
+#include <algorithm>
 #include "Book.h"
+#include "User.h"
+#include "Inventory.h"
 #include "searchBook.h"
 using namespace std;
 
-//bootSystem initialize bookvector and uservector from database in the main function
-void bootSystem(vector<Book> &bookVector) {
+//loadBooks initialize bookvector from bookdata.txt
+void loadBooks(vector<Book> &bookVector) {
 	system("cls");
 	fstream inFile;
-	inFile.open("database.txt");
+	inFile.open("bookdata.txt");
 
 	if(!inFile.is_open()){
-		cout << "Database error. Please try again later.";
+		cout << "bookdata error. Please try again later.";
+		getchar();
 		exit(1);
 	}
 	else	{cout << "Loading Book List..." << endl;}
 
 	for(int i=0; !inFile.eof(); i++){
 		Book bookHolder;
+		int copy, ttlCopy;
 		getline(inFile, bookHolder.bookID, '\t');
-
 		getline(inFile, bookHolder.Title, '\t');
-
-		getline(inFile, bookHolder.ISBN);
+		getline(inFile, bookHolder.ISBN, '\t');
+		inFile >> copy >> ttlCopy;
+		inFile >> ws;
+		bookHolder.inventory.setCopy(copy);
+		bookHolder.inventory.setTotal(ttlCopy);
 		
 		bookVector.push_back(bookHolder);
 	}
 
 	inFile.close();
 }
+
+// bool login(Customer &customer){
+// 	system("cls");
+// 	fstream inFile;
+// 	inFile.open("customerdata.txt");
+// 	if(!inFile.is_open()){
+// 		cout << "customerdata error. Please try again later.";
+// 		getchar();
+// 		exit(1);
+// 	}
+
+// 	string inputID,inputPsw,userID,userPsw;
+// 	cout << "Enter User ID: ";
+// 	cin >> inputID;
+// 	cout << "Enter password: ";
+// 	cin >> inputPsw;
+
+// 	//Comparing user inputs with customerdata
+// 	while(!inFile.eof()){
+// 		getline(inFile,userID,'\t');
+// 		if(inputID==userID){
+// 			getline(inFile,userPsw,'\t');
+// 			if(inputPsw==userPsw)	break;
+// 			else{
+// 				cout << "Wrong Password" << endl;
+// 				system("pause");
+// 				return false;
+// 			}
+// 		}
+// 		else	getline(inFile,ws);
+// 		if(inFile.eof()){
+// 			cout << "User not found" << endl;
+// 			system("pause");
+// 			return false;
+// 		}
+// 	}
+
+// 	//Fetching customerdata
+// 	string userName;
+// 	int numBook;
+// 	string bookID, brwDate;
+// 	getline(inFile,userName,'\t');
+// 	inFile >> numBook;
+// 	inFile >> ws;
+// 	for(int i=0;i<numBook;i++){
+//         string tempstr;
+//         getline(inFile, tempstr, ',');
+//         userHolder.books.push_back(tempstr);
+//         inFile >> ws;
+//     }
+
+// 	return true;
+// }
 
 //User function 1. Search for books
 //void searchBook(){
@@ -85,11 +144,12 @@ int userFunction(vector<Book> &bookVector) {
 void addBook(vector<Book> &bookVector) {
 
 	fstream inFile;
-	inFile.open("database.txt", ios_base::app);
+	inFile.open("bookdata.txt", ios_base::app);
 
 	string newID;
 	string newTitle;
 	string newISBN;
+	int totalCopy;
 
 	cout << "Enter ID of new book: ";
 	cin >> newID;
@@ -101,33 +161,81 @@ void addBook(vector<Book> &bookVector) {
 	cout << "Enter ISBN of new book: ";
 	cin >> newISBN;
 
-	Book newBook(newID, newTitle, newISBN);
+	cout << "Enter the amount of copy: ";
+	cin >> totalCopy;
+
+	Book newBook(newID, newTitle, newISBN, totalCopy, totalCopy);
 	bookVector.push_back(newBook);
 
-	inFile << "\n" << newBook.getBookID() << "\t" << newBook.getTitle() << "\t" << newBook.getISBN();
+	inFile << "\n" << newBook.getBookID() << "\t" << newBook.getTitle() << "\t" << newBook.getISBN() << "\t" << newBook.inventory.getInStock() << " " << newBook.inventory.getTotal();
 }
 
 void deleteBook(vector<Book>& bookVector) {
-  cout << "WIP" << endl;
+	string bookID;
+    cout << "Enter the ID of the book to delete: ";
+    cin >> bookID;
+
+    auto it = find_if(bookVector.begin(), bookVector.end(), [&bookID](const Book& book) {
+        return book.getBookID() == bookID;
+    });
+
+    if (it != bookVector.end()) {
+        bookVector.erase(it);
+        cout << "Book deleted successfully." << endl;
+
+        // Update the database file
+        ofstream outFile("bookdata.txt");
+        if (outFile.is_open()) {
+            for (const auto& book : bookVector) {
+                outFile << book.getBookID() << "\t" << book.getTitle() << "\t" << book.getISBN() << "\t" << book.inventory.getInStock() << " " << book.inventory.getTotal() << endl;
+            }
+            outFile.close();
+        } else {
+            cout << "Error updating bookdata file." << endl;
+        }
+    } else {
+        cout << "Book with ID " << bookID << " not found." << endl;
+    }
+    system("pause");
 }
 
 
-
-void adminFunction() {
+void adminFunction(vector<Book> &bookVector) {
 	system("cls");
 	cout << "\t\tAdmin Menu" << endl;
 
-	vector<Book> bookVector;
+	int adminAction;
+    do {
+        cout << "\t1. Add Book\n";
+        cout << "\t2. Delete Book\n";
+        cout << "\t3. Exit Admin Menu\n";
+        cout << "Enter action: ";
+        cin >> adminAction;
 
-	addBook(bookVector);
+        switch (adminAction) {
+            case 1:
+                addBook(bookVector);
+                break;
+            case 2:
+                deleteBook(bookVector);
+                break;
+            case 3:
+                return;
+            default:
+                cout << "Please enter number between 1-3" << endl;
+                system("pause");
+                break;
+        }
+    } while (true);
 }
 
 int main()
 {
 	vector<Book> bookVector;
 	int actionNum;
+	bool _loginSuccess=0;
 
-	bootSystem(bookVector);
+	loadBooks(bookVector);
 	
 	do{
 		system("cls");
@@ -141,10 +249,12 @@ int main()
 		switch (actionNum)
 		{
 			case 1:
+				//Customer customer;
+				//_loginSuccess = login(customer);
 				userFunction(bookVector);
 				break;
 			case 2:
-				adminFunction();
+				adminFunction(bookVector);
 				break;
 			case 3:
 				return 0;
