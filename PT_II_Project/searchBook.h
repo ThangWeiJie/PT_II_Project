@@ -40,7 +40,7 @@ void showSearchResult(vector<Book *> result, int p){
         }
 
         cout << right << setw(5) << i+1 << ".| " << left << setw(10) << result[i]->getBookID()  << "|" << setw(TITLE_LENGTH_perROW) << titleL0 << "| " 
-            << result[i]->getISBN() << " |" << " OutofStock" << endl;
+            << setw(13) << result[i]->getISBN() << " | " << result[i]->inventory.status() << endl;
         cout << right << setw(7) << "|" << setw(12) << "|" << left << setw(TITLE_LENGTH_perROW) << titleL1 << "|               |" << endl;
     }
     cout << borderLine();

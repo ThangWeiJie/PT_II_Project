@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "Stock.h"
+#include "Inventory.h"
 using namespace std;
 
 class Book {
@@ -13,10 +13,10 @@ private:
 	string ISBN;
 
 public:
-	Stock stock;
+	Inventory inventory;
 	//Constructors
 	Book();
-	Book(string, string, string);
+	Book(string, string, string, int, int);
 
 	//Mutators
 	void setBookID(string);
