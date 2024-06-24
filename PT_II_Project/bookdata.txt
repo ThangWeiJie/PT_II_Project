@@ -37,7 +37,8 @@
 #U0000001	Un-Cancel Robert E. Lee: An Open Letter to the Trustees of Washington and Lee University	9798888454855	3 3
 #V0000001	Vampire Hunter D Omnibus: Book One	9781506725307	3 3
 #W0000001	What This Comedian Said Will Shock You	9781668051351	3 3
-#Y0000001	You'd Be Home Now	9780525708070	3 3
-#$0000001	5 Ingredients Mediterranean: Simple Incredible Food [American Measurements]	9781250319852	3 3
-#$0000002	$For test addbook function	999999999999	3 3
+#Y0000001	Third unedited	3000	3 3
+#$0000001	Second unedited thing	3021	3 3
+#$0000002	Unedited thing	9091	3 3
 #abc	abc	123	3 3
+			3 3
