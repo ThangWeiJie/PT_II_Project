@@ -70,6 +70,7 @@ bool login(Customer &customer, vector<Book> &bookVector){
 	inFile.open("customerdata.txt");
 	if(!inFile.is_open()){
 		cout << "customerdata error. Please try again later.";
+		getchar();
 		exit(1);
 	}
 
@@ -144,8 +145,36 @@ bool login(Admin &admin){
 //	cout << "Search result";
 //}
 
+//User function 2. Borrow books
+void borrowBook(Customer &customer, Book *book){
+	customer.borrowBook(book);
+}
+void borrowBook(Customer &customer, vector<Book> &books){
+	system("cls");
+	string userInput = "";
+
+	cout << "Enter the book ID/ISBN to borrow: ";
+	cin >> userInput;
+	for(int i=0;i<books.size();i++){
+        if(books[i].getBookID() == userInput){
+			borrowBook(customer, &books[i]);
+			cout << "Book found" << endl;
+			break;
+		}
+		else if(books[i].getBookID() == userInput){
+			borrowBook(customer, &books[i]);
+			cout << "Book found" << endl;
+			break;
+		}
+		else if(i+1 >= books.size()){
+			cout << "Book not found" << endl;
+		}
+    }
+	system("pause");
+}
+
 //Show user menu
-int userFunction(vector<Book> &bookVector) {
+int userFunction(Customer &customer, vector<Book> &bookVector) {
 	do{
 		system("cls");
 
@@ -165,7 +194,7 @@ int userFunction(vector<Book> &bookVector) {
 			searchBook(bookVector);
 			break;
 		case 2:
-			cout << "WIP" << endl;
+			borrowBook(customer, bookVector);
 			break;
 		case 3:
 			cout << "WIP" << endl;
@@ -175,7 +204,7 @@ int userFunction(vector<Book> &bookVector) {
 			system("pause");
 			return 0;
 		default:
-			cout << "Please enter number between 1-5" << endl;
+			cout << "Please enter number between 1-4" << endl;
 			system("pause");
 			break;
 		}
@@ -230,7 +259,8 @@ void deleteBook(vector<Book>& bookVector) {
         ofstream outFile("bookdata.txt");
         if (outFile.is_open()) {
             for (const auto& book : bookVector) {
-                outFile << book.getBookID() << "\t" << book.getTitle() << "\t" << book.getISBN() << "\t" << book.inventory.getInStock() << " " << book.inventory.getTotal() << endl;
+                outFile << book.getBookID() << "\t" << book.getTitle() << "\t" << book.getISBN() << "\t" << book.inventory.getInStock() << " " << book.inventory.getTotal();
+				if(&book != &*bookVector.rbegin())	outFile << endl;
             }
             outFile.close();
         } else {
@@ -249,7 +279,7 @@ void editBook(vector <Book>& bookVector) {
 
 	Book* selectedBook;
 	for (int i = 0; i < bookVector.size(); i++) {
-		if (bookVector[i] == bookID) {
+		if (bookVector[i].getBookID() == bookID) {
 			selectedBook = &bookVector[i];
 
 			string newID;
@@ -272,7 +302,8 @@ void editBook(vector <Book>& bookVector) {
 			if (outFile.is_open()) {
 				for (const auto& book : bookVector)
 				{
-					outFile << book.getBookID() << "\t" << book.getTitle() << "\t" << book.getISBN() << "\t" << book.inventory.getInStock() << " " << book.inventory.getTotal() << endl;
+					outFile << book.getBookID() << "\t" << book.getTitle() << "\t" << book.getISBN() << "\t" << book.inventory.getInStock() << " " << book.inventory.getTotal();
+					if(&book != &*bookVector.rbegin())	outFile << endl;
 				}
 				outFile.close();
 			}
@@ -281,7 +312,7 @@ void editBook(vector <Book>& bookVector) {
 			}
 			break;
 		}
-		else if(i+2 == bookVector.size()) { 
+		else if(i+1 >= bookVector.size()) { 
 			cout << "Book not found." << endl; 
 			break;
 		}
@@ -292,7 +323,7 @@ void editBook(vector <Book>& bookVector) {
 	system("pause");
 }
 
-void adminFunction(vector<Book> &bookVector) {
+void adminFunction(Admin admin, vector<Book> &bookVector) {
 	system("cls");
 	cout << "\t\tAdmin Menu" << endl;
 
@@ -300,8 +331,8 @@ void adminFunction(vector<Book> &bookVector) {
     do {
         cout << "\t1. Add Book\n";
         cout << "\t2. Delete Book\n";
-        cout << "\t3. Edit Book Info\n";
-		cout << "\t4. Exit admin menu\n";
+		cout << "\t3. Edit Book Info\n";
+        cout << "\t4. Exit Admin Menu\n";
         cout << "Enter action: ";
         cin >> adminAction;
 
@@ -314,11 +345,11 @@ void adminFunction(vector<Book> &bookVector) {
                 break;
             case 3:
 				editBook(bookVector);
-				break;
+                break;
 			case 4:
 				return;
             default:
-                cout << "Please enter number between 1-3" << endl;
+                cout << "Please enter number between 1-4" << endl;
                 system("pause");
                 break;
         }
@@ -347,12 +378,12 @@ int main()
 			case 1:{
 				Customer customer;
 				_loginSuccess = login(customer,bookVector);
-				if(_loginSuccess)	userFunction(bookVector);
+				if(_loginSuccess)	userFunction(customer,bookVector);
 				break;}
 			case 2:{
 				Admin admin;
 				_loginSuccess = login(admin);
-				if(_loginSuccess)	adminFunction(bookVector);
+				if(_loginSuccess)	adminFunction(admin,bookVector);
 				break;}
 			case 3:
 				return 0;
