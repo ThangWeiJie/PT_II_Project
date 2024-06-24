@@ -50,11 +50,18 @@ string Book::toUpper(string str){
     return tempStr;
 }
 
+void Book::print(){
+	cout << "Book details: " << endl;
+	cout << "Book ID: " << bookID << endl;
+	cout << "Book Title: " << Title << endl;
+	cout << "ISBN: " << ISBN << endl;
+}
+
 //Overloaded operators
 bool Book::operator==(string search){
 	search = toUpper(search);
-	if((bookID.find(search)>=0) && (bookID.find(search)<bookID.length()))	return true;
+	if((toUpper(bookID).find(search)>=0) && (toUpper(bookID).find(search)<bookID.length()))	return true;
 	if((toUpper(Title).find(search)>=0) && (toUpper(Title).find(search)<Title.length()))	return true;
-	if((toUpper(ISBN).find(search)>=0) && (toUpper(ISBN).find(search)<ISBN.length()))	return true;
+	if((ISBN.find(search)>=0) && (ISBN.find(search)<ISBN.length()))	return true;
 	return false;
 }

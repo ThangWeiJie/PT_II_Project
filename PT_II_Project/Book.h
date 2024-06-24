@@ -29,6 +29,7 @@ public:
 
 	//Functions
 	string toUpper(string);
+	void print();
 
 	//Overloaded operators
 	bool operator==(string);
