@@ -8,7 +8,6 @@
 #include "searchBook.h"
 using namespace std;
 
-const time_t currTime = time(NULL);
 
 //loadBooks initialize bookvector from bookdata.txt
 void loadBooks(vector<Book> &bookVector) {
@@ -89,7 +88,7 @@ bool login(Customer &customer, vector<Book> &bookVector){
 	//Fetching customerdata
 	string userName;
 	int numBook;
-	string borrowDate;
+	string dueDate;
 
 	getline(inFile,userName,'\t');
 	inFile >> numBook;
@@ -97,11 +96,13 @@ bool login(Customer &customer, vector<Book> &bookVector){
 	customer.setNumBook(numBook);
 	for(int i=0;i<numBook;i++){
         string bookID;
+		inFile.ignore(1);
         getline(inFile, bookID, ',');
-		inFile >> borrowDate;
+		inFile >> dueDate;
 		customer.pointToBook(bookID,bookVector);
-		customer.mkBorrowTm(borrowDate);
+		customer.mkDueDateTm(dueDate);
     }
+	customer.calculateOverDue();
 
 	cout << "Login successful! Welcome " << userName << endl;
 	system("pause");
@@ -151,6 +152,7 @@ void borrowBook(Customer &customer, Book *book){
 }
 void borrowBook(Customer &customer, vector<Book> &books){
 	system("cls");
+
 	string userInput = "";
 
 	cout << "Enter the book ID/ISBN to borrow: ";
@@ -197,7 +199,8 @@ int userFunction(Customer &customer, vector<Book> &bookVector) {
 			borrowBook(customer, bookVector);
 			break;
 		case 3:
-			cout << "WIP" << endl;
+			customer.print();
+			system("pause");
 			break;
 		case 4:
 			cout << "Successfully logout..." << endl;
