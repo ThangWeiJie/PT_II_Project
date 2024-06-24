@@ -8,6 +8,8 @@
 #include "searchBook.h"
 using namespace std;
 
+const time_t currTime = time(NULL);
+
 //loadBooks initialize bookvector from bookdata.txt
 void loadBooks(vector<Book> &bookVector) {
 	system("cls");
@@ -26,9 +28,8 @@ void loadBooks(vector<Book> &bookVector) {
 		int copy, ttlCopy;
 		getline(inFile, bookHolder.bookID, '\t');
 		getline(inFile, bookHolder.Title, '\t');
-		getline(inFile, bookHolder.ISBN, '\t');
-		inFile >> copy >> ttlCopy;
-		inFile >> ws;
+		inFile >> bookHolder.ISBN >> copy >> ttlCopy;
+		inFile.ignore();
 		bookHolder.inventory.setCopy(copy);
 		bookHolder.inventory.setTotal(ttlCopy);
 		
@@ -38,58 +39,105 @@ void loadBooks(vector<Book> &bookVector) {
 	inFile.close();
 }
 
-// bool login(Customer &customer){
-// 	system("cls");
-// 	fstream inFile;
-// 	inFile.open("customerdata.txt");
-// 	if(!inFile.is_open()){
-// 		cout << "customerdata error. Please try again later.";
-// 		getchar();
-// 		exit(1);
-// 	}
+bool checkID_Psw(fstream &inFile,string inputID, string inputPsw){
+	string ID,Psw;
+	while(!inFile.eof()){
+		getline(inFile,ID,'\t');
+		//Find matched userID
+		if(inputID==ID){
+			getline(inFile,Psw,'\t');
+			//Check input password
+			if(inputPsw==Psw)	break;
+			else{
+				cout << "Wrong Password" << endl;
+				system("pause");
+				return false;
+			}
+		}
+		else	inFile.ignore(1000,'\n');
+		if(inFile.eof()){
+			cout << "User not found" << endl;
+			system("pause");
+			return false;
+		}
+	}
+	return true;
+}
 
-// 	string inputID,inputPsw,userID,userPsw;
-// 	cout << "Enter User ID: ";
-// 	cin >> inputID;
-// 	cout << "Enter password: ";
-// 	cin >> inputPsw;
+bool login(Customer &customer, vector<Book> &bookVector){
+	system("cls");
+	fstream inFile;
+	inFile.open("customerdata.txt");
+	if(!inFile.is_open()){
+		cout << "customerdata error. Please try again later.";
+		getchar();
+		exit(1);
+	}
 
-// 	//Comparing user inputs with customerdata
-// 	while(!inFile.eof()){
-// 		getline(inFile,userID,'\t');
-// 		if(inputID==userID){
-// 			getline(inFile,userPsw,'\t');
-// 			if(inputPsw==userPsw)	break;
-// 			else{
-// 				cout << "Wrong Password" << endl;
-// 				system("pause");
-// 				return false;
-// 			}
-// 		}
-// 		else	getline(inFile,ws);
-// 		if(inFile.eof()){
-// 			cout << "User not found" << endl;
-// 			system("pause");
-// 			return false;
-// 		}
-// 	}
+	string inputID,inputPsw;
+	cout << "Enter User ID: ";
+	cin >> inputID;
+	cout << "Enter password: ";
+	cin >> inputPsw;
 
-// 	//Fetching customerdata
-// 	string userName;
-// 	int numBook;
-// 	string bookID, brwDate;
-// 	getline(inFile,userName,'\t');
-// 	inFile >> numBook;
-// 	inFile >> ws;
-// 	for(int i=0;i<numBook;i++){
-//         string tempstr;
-//         getline(inFile, tempstr, ',');
-//         userHolder.books.push_back(tempstr);
-//         inFile >> ws;
-//     }
+	if(!checkID_Psw(inFile,inputID,inputPsw))	return false;
+	else{
+		customer.setID(inputID);
+		customer.setPsw(inputPsw);
+	}
 
-// 	return true;
-// }
+	//Fetching customerdata
+	string userName;
+	int numBook;
+	string borrowDate;
+
+	getline(inFile,userName,'\t');
+	inFile >> numBook;
+	customer.setName(userName);
+	customer.setNumBook(numBook);
+	for(int i=0;i<numBook;i++){
+        string bookID;
+        getline(inFile, bookID, ',');
+		inFile >> borrowDate;
+		customer.pointToBook(bookID,bookVector);
+		customer.mkBorrowTm(borrowDate);
+    }
+
+	cout << "Login successful! Welcome " << userName << endl;
+	system("pause");
+	return true;
+}
+
+bool login(Admin &admin){
+	system("cls");
+	fstream inFile;
+	inFile.open("admindata.txt");
+	if(!inFile.is_open()){
+		cout << "admindata error. Please try again later.";
+		getchar();
+		exit(1);
+	}
+
+	string inputID,inputPsw;
+	cout << "Enter User ID: ";
+	cin >> inputID;
+	cout << "Enter password: ";
+	cin >> inputPsw;
+
+	if(!checkID_Psw(inFile,inputID,inputPsw))	return false;
+	else{
+		admin.setID(inputID);
+		admin.setPsw(inputPsw);
+	}
+
+	string adminName;
+	inFile >> adminName;
+	admin.setName(adminName);
+
+	cout << "Login successful! Welcome " << adminName << endl;
+	system("pause");
+	return true;
+}
 
 //User function 1. Search for books
 //void searchBook(){
@@ -248,14 +296,16 @@ int main()
 
 		switch (actionNum)
 		{
-			case 1:
-				//Customer customer;
-				//_loginSuccess = login(customer);
-				userFunction(bookVector);
-				break;
-			case 2:
-				adminFunction(bookVector);
-				break;
+			case 1:{
+				Customer customer;
+				_loginSuccess = login(customer,bookVector);
+				if(_loginSuccess)	userFunction(bookVector);
+				break;}
+			case 2:{
+				Admin admin;
+				_loginSuccess = login(admin);
+				if(_loginSuccess)	adminFunction(bookVector);
+				break;}
 			case 3:
 				return 0;
 			default:

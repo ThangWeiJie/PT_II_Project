@@ -1,5 +1,5 @@
-#A0000001	Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones	9780735211292	3 3
-#A0000002	Allegedly	9780062422651	3 3
+#A0000001	Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones	9780735211292	2 3
+#A0000002	Allegedly	9780062422651	2 3
 #A0000003	All I Need (The Knights Series)	9798990321915	3 3
 #B0000001	B.E.B.O.	9798325247941	3 3
 #C0000001	C Programming Absolute Beginner's Guide	9780789751980	3 3

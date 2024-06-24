@@ -1,3 +1,3 @@
-user1	123	User1	0	
-Ben310	123456	Benjamin	3	456,8763,888,
-user2	123	User2	1	156,
+user1	123	User1	0
+Ben310	123456	Benjamin Chew	2 #A1,20240530 #A2,20240528
+user2	123	User2	0
