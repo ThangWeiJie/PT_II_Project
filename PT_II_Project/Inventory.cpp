@@ -19,8 +19,14 @@ int Inventory::getTotal()   const{return totalCopy;}
 //Mutators
 void Inventory::setCopy(int c)   {copyInStock = c;}
 void Inventory::setTotal(int ttl)   {totalCopy = ttl;}
-void Inventory::borrowBook()   {copyInStock-=0;}
-void Inventory::returnBook()   {copyInStock+=0;}
+void Inventory::borrowBook(){
+    if(copyInStock>0)   copyInStock-=1;
+    else{
+        cout << "The book is currently out of stock" << endl;
+        system("pause");
+    }
+}
+void Inventory::returnBook()   {copyInStock+=1;}
 void Inventory::addCopy(int c){
     copyInStock += c;
     totalCopy += c;

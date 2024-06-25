@@ -62,8 +62,8 @@ void searchBook(vector<Book> books){
         showSearchResult(booksMatched, page);
 
         cout << "Searching keyword: " << left << setw(13) << userSearch.substr(0,10)+((userSearch.length()>10)? "...":"") << right << setw(77) << "Page " + to_string(page+1) + "/" + to_string(totalPage) << endl;
-        cout << "\nSelect action:(1. Search book / 2. Borrow book / " << ((page<totalPage-1)? "3. Next page / " : "") 
-             << ((page>0)? "4. Previous page / " : "") << "0. Back to user menu)" << endl << "=>";
+        cout << "\nSelect action:(1. Search book / 2. Borrow book / " << ((page>0)? "3. Previous page / " : "")
+             << ((page<totalPage-1)? "4. Next page / " : "") << "0. Back to user menu)" << endl << "=>";
         cin >> userAction;
         switch(userAction){
             case 1:
@@ -77,10 +77,10 @@ void searchBook(vector<Book> books){
                 cin >> bookNo;
                 break;
             case 3:
-                if(page<totalPage-1) page+=1;
+                if(page>0) page-=1;
                 break;
             case 4:
-                if(page>0) page-=1;
+                if(page<totalPage-1) page+=1;
                 break;
             case 0:
                 _back = true;
