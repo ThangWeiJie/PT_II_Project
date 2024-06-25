@@ -506,6 +506,7 @@ void bookReturn(vector<Book> &books){
 	cin >> bookID;
 
 	returner.returnBook(bookID);
+	updateData(returner, books);
 }
 
 //Show admin menu
