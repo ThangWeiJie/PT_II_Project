@@ -1,8 +1,8 @@
-#A0000001	Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones	9780735211292	2 3
+#A0000001	Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones	9780735211292	3 3
 #A0000002	Allegedly	9780062422651	2 3
 #A0000003	All I Need (The Knights Series)	9798990321915	3 3
-#B0000001	B.E.B.O.	9798325247941	0 3
-#C0000001	C Programming Absolute Beginner's Guide	9780789751980	2 3
+#B0000001	B.E.B.O.	9798325247941	3 3
+#C0000001	C Programming Absolute Beginner's Guide	9780789751980	0 3
 #C0000002	C# & C++: 5 Books in 1 - The #1 Coding Course from Beginner to Advanced (2024) (Computer Programming)	9798390090077	3 3
 #D0000001	D&D Player's Handbook (Dungeons & Dragons Core Rulebook)	9780786965601	3 3
 #D0000002	D&D 5E: Original Adventures Reincarnated #7: Dark Tower	9781956449501	3 3
@@ -40,5 +40,5 @@
 #Y0000001	You'd Be Home Now	9780525708070	3 3
 #$0000001	5 Ingredients Mediterranean: Simple Incredible Food [American Measurements]	9781250319852	3 3
 #$0000002	$For test addbook function	999999999999	3 3
-#ABC	ABC	123	1 3
+#ABC	ABC	123	3 3
 #BBB	bbb	123	3 3

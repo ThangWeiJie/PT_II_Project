@@ -4,6 +4,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
+#include <stdio.h>
 #include "Book.h"
 #include "User.h"
 #include "Inventory.h"
@@ -23,9 +24,9 @@ void loadBooks(vector<Book> &bookVector) {
 		getchar();
 		exit(1);
 	}
-	else	{cout << "Loading Book List..." << endl;}
+	else {cout << "Loading Book List..." << endl;}
 
-	for(int i=0; !inFile.eof(); i++){
+	while(!inFile.eof()){
 		Book bookHolder;
 		int copy, ttlCopy;
 		getline(inFile, bookHolder.bookID, '\t');
@@ -41,7 +42,7 @@ void loadBooks(vector<Book> &bookVector) {
 	inFile.close();
 }
 
-bool fetchCustomer(Customer &customer, vector<Book> &bookVector, string userID){
+void loadCustomers(vector<Customer> &customers, vector<Book> &books){
 	fstream inFile;
 	inFile.open("customerdata.txt");
 
@@ -50,61 +51,61 @@ bool fetchCustomer(Customer &customer, vector<Book> &bookVector, string userID){
 		getchar();
 		exit(1);
 	}
-	string ID,Psw,Name;
+	else {cout << "Loading Customer List..." << endl;}
+
 	while(!inFile.eof()){
-		getline(inFile,ID,'\t');
-		if(userID==ID){
-			getline(inFile,Psw,'\t');
-			getline(inFile,Name,'\t');
-			break;
+		Customer customerHolder;
+		getline(inFile, customerHolder.userID, '\t');
+		getline(inFile, customerHolder.password, '\t');
+		getline(inFile, customerHolder.name, '\t');
+		inFile >> customerHolder.numBookBorrow;
+		for(int i=0; i<customerHolder.getNumBookBorrow(); i++){
+			string bookID;
+			string dueDate;
+			inFile.ignore(1);
+			getline(inFile, bookID, ',');
+			inFile >> dueDate;
+			customerHolder.pointToBook(bookID, books);
+			customerHolder.mkDueDateTm(dueDate);
 		}
-		else	inFile.ignore(1000,'\n');
-		if(inFile.eof()){
-			cout << "User not found" << endl;
-			system("pause");
-			return 0;
-		}
+		customerHolder.calculateOverDue();
+
+		customers.push_back(customerHolder);
+		inFile.ignore(100,'\n');
 	}
-	customer.setID(ID);
-	customer.setPsw(Psw);
-	customer.setName(Name);
 
-	int numBook;
-	string dueDate;
-
-	inFile >> numBook;
-	customer.setNumBook(numBook);
-	for(int i=0;i<numBook;i++){
-        string bookID;
-		inFile.ignore(1);
-        getline(inFile, bookID, ',');
-		inFile >> dueDate;
-		customer.pointToBook(bookID,bookVector);
-		customer.mkDueDateTm(dueDate);
-    }
-	customer.calculateOverDue();
-	
 	inFile.close();
-	return 1;
 }
 
-bool checkID_Psw(fstream &inFile,string inputID, string inputPsw){
-	string ID,Psw;
+void loadAdmins(vector<Admin> &admins){
+	fstream inFile;
+	inFile.open("admindata.txt");
+
+	if(!inFile.is_open()){
+		cout << "admindata error. Please try again later.";
+		getchar();
+		exit(1);
+	}
+	else {cout << "Loading Admin List..." << endl;}
+
 	while(!inFile.eof()){
-		getline(inFile,ID,'\t');
-		//Find matched userID
-		if(inputID==ID){
-			getline(inFile,Psw,'\t');
-			//Check input password
-			if(inputPsw==Psw)	break;
-			else{
-				cout << "Wrong Password" << endl;
-				system("pause");
-				return false;
-			}
+		Admin adminHolder;
+		getline(inFile, adminHolder.userID, '\t');
+		getline(inFile, adminHolder.password, '\t');
+		getline(inFile, adminHolder.name);
+		admins.push_back(adminHolder);
+	}
+
+	inFile.close();
+}
+
+bool pointToCustomer(Customer *&customer, vector<Customer> &customerList, string inputID){
+	for(int i=0; i<customerList.size(); i++){
+		if(inputID==customerList[i].getID()){
+			customer = &customerList[i];
+			break;
 		}
-		else	inFile.ignore(1000,'\n');
-		if(inFile.eof()){
+		else if(i+1 >= customerList.size()){
 			cout << "User not found" << endl;
 			system("pause");
 			return false;
@@ -113,15 +114,23 @@ bool checkID_Psw(fstream &inFile,string inputID, string inputPsw){
 	return true;
 }
 
-bool login(Customer &customer, vector<Book> &bookVector){
-	system("cls");
-	fstream inFile;
-	inFile.open("customerdata.txt");
-	if(!inFile.is_open()){
-		cout << "customerdata error. Please try again later.";
-		getchar();
-		exit(1);
+bool pointToAdmin(Admin *&admin, vector<Admin> &adminList, string inputID){
+	for(int i=0; i<adminList.size(); i++){
+		if(inputID==adminList[i].getID()){
+			admin = &adminList[i];
+			break;
+		}
+		else if(i+1 >= adminList.size()){
+			cout << "User not found" << endl;
+			system("pause");
+			return false;
+		}
 	}
+	return true;
+}
+
+bool login(Customer *&customer, vector<Book> &bookVector, vector<Customer> &customerList){
+	system("cls");
 
 	string inputID,inputPsw;
 	cout << "Enter User ID: ";
@@ -129,98 +138,66 @@ bool login(Customer &customer, vector<Book> &bookVector){
 	cout << "Enter password: ";
 	cin >> inputPsw;
 
-	if(!checkID_Psw(inFile,inputID,inputPsw))	return false;
-	else{
-		customer.setID(inputID);
-		customer.setPsw(inputPsw);
+	if(!pointToCustomer(customer,customerList,inputID))	return false;
+	if(inputPsw!=customer->getPsw()){
+		cout << "Wrong Password" << endl;
+		system("pause");
+		return false;
 	}
-
-	//Fetching customerdata
-	string userName;
-	int numBook;
-	string dueDate;
-
-	getline(inFile,userName,'\t');
-	inFile >> numBook;
-	customer.setName(userName);
-	customer.setNumBook(numBook);
-	for(int i=0;i<numBook;i++){
-        string bookID;
-		inFile.ignore(1);
-        getline(inFile, bookID, ',');
-		inFile >> dueDate;
-		customer.pointToBook(bookID,bookVector);
-		customer.mkDueDateTm(dueDate);
-    }
-	customer.calculateOverDue();
-
-	cout << "Login successful! Welcome " << userName << endl;
+	
+	cout << "Login successful! Welcome " << customer->getName() << endl;
 	system("pause");
 	return true;
 }
 
-void updateData(Customer &customer, vector<Book> &books){
+bool login(Admin *&admin, vector<Admin> &adminList){
 	system("cls");
+
+	string inputID,inputPsw;
+	cout << "Enter Admin ID: ";
+	cin >> inputID;
+	cout << "Enter password: ";
+	cin >> inputPsw;
+
+	if(!pointToAdmin(admin,adminList,inputID))	return false;
+	if(inputPsw!=admin->getPsw()){
+		cout << "Wrong Password" << endl;
+		system("pause");
+		return false;
+	}
+	
+	cout << "Login successful! Welcome " << admin->getName() << endl;
+	system("pause");
+	return true;
+}
+
+void updateData(vector<Customer> &customers, vector<Book> &books){
 	fstream outFile;
-	outFile.open("customerdata.txt");
+	remove("customerdata.txt");
+	outFile.open("customerdata.txt", ios::out);
 	if(!outFile.is_open()){
 		cout << "customerdata error. Please try again later.";
 		getchar();
 		exit(1);
 	}
-	string buffer;
-	while(!outFile.eof()){
-		getline(outFile,buffer,'\t');
-		//Find matched userID
-		if(customer.getID()==buffer)	break;
-		else	outFile.ignore(1000,'\n');
-	}
-	getline(outFile,buffer,'\t');
-	getline(outFile,buffer,'\t');
-	outFile << customer.getNumBookBorrow() << " ";
-	outFile << customer.borrowDetails();
+	for (const auto& customer : customers) {
+        outFile << customer.getID() << "\t" << customer.getPsw() << "\t" << customer.getName() << "\t" << customer.getNumBookBorrow() << " " << customer.borrowDetails();
+		if(&customer != &*customers.rbegin())	outFile << endl;
+    }
 
 	outFile.close();
 	outFile.open("bookdata.txt");
+	if(!outFile.is_open()){
+		cout << "bookdata error. Please try again later.";
+		getchar();
+		exit(1);
+	}
 	for (const auto& book : books) {
         outFile << book.getBookID() << "\t" << book.getTitle() << "\t" << book.getISBN() << "\t" << book.inventory.getInStock() << " " << book.inventory.getTotal();
 		if(&book != &*books.rbegin())	outFile << endl;
     }
 
-	outFile.close();
-
-	cout << "Successfully logout, Have a nice day! " << customer.getName() << endl;
-}
-
-bool login(Admin &admin){
-	system("cls");
-	fstream inFile;
-	inFile.open("admindata.txt");
-	if(!inFile.is_open()){
-		cout << "admindata error. Please try again later.";
-		getchar();
-		exit(1);
-	}
-
-	string inputID,inputPsw;
-	cout << "Enter User ID: ";
-	cin >> inputID;
-	cout << "Enter password: ";
-	cin >> inputPsw;
-
-	if(!checkID_Psw(inFile,inputID,inputPsw))	return false;
-	else{
-		admin.setID(inputID);
-		admin.setPsw(inputPsw);
-	}
-
-	string adminName;
-	inFile >> adminName;
-	admin.setName(adminName);
-
-	cout << "Login successful! Welcome " << adminName << endl;
-	system("pause");
-	return true;
+	outFile.close();	
 }
 
 //User function 1. Search for books
@@ -261,7 +238,7 @@ void showSearchResult(vector<Book *> result, int p){
     cout << borderLine();
 }
 
-void searchBook(Customer &customer, vector<Book> &books){
+void searchBook(Customer *customer, vector<Book> &books){
     string userSearch = "";
     int userAction = 1, page = 0, totalPage = 0, bookNo;
     bool _back = false;
@@ -290,7 +267,7 @@ void searchBook(Customer &customer, vector<Book> &books){
             case 2:
                 cout << "\nInsert the No. of book:(1-" << booksMatched.size() << ") ";
                 cin >> bookNo;
-                customer.borrowBook(booksMatched[bookNo-1]);
+                customer->borrowBook(booksMatched[bookNo-1]);
 				system("pause");
                 break;
             case 3:
@@ -314,7 +291,7 @@ void searchBook(Customer &customer, vector<Book> &books){
 }
 
 //User function 2. Borrow books
-void borrowBook(Customer &customer, vector<Book> &books){
+void borrowBook(Customer *customer, vector<Book> &books){
 	system("cls");
 
 	string userInput = "";
@@ -323,11 +300,11 @@ void borrowBook(Customer &customer, vector<Book> &books){
 	cin >> userInput;
 	for(int i=0;i<books.size();i++){
         if(books[i].getBookID() == userInput){
-			customer.borrowBook(&books[i]);
+			customer->borrowBook(&books[i]);
 			break;
 		}
 		else if(books[i].getBookID() == userInput){
-			customer.borrowBook(&books[i]);
+			customer->borrowBook(&books[i]);
 			break;
 		}
 		else if(i+1 >= books.size()){
@@ -338,7 +315,7 @@ void borrowBook(Customer &customer, vector<Book> &books){
 }
 
 //Show user menu
-int userFunction(Customer &customer, vector<Book> &bookVector) {
+int userFunction(Customer *customer, vector<Book> &bookVector, vector<Customer> &customerVector) {
 	do{
 		system("cls");
 
@@ -362,11 +339,12 @@ int userFunction(Customer &customer, vector<Book> &bookVector) {
 			break;
 		case 3:
 			system("cls");
-			customer.print();
+			customer->print();
 			system("pause");
 			break;
 		case 4:
-			updateData(customer, bookVector);
+			updateData(customerVector, bookVector);
+			cout << "Successfully logout, Have a nice day! " << customer->getName() << endl;
 			system("pause");
 			return 0;
 		default:
@@ -493,23 +471,24 @@ void editBook(vector <Book>& bookVector) {
 }
 
 //Admin function 4. Issue Book return
-void bookReturn(vector<Book> &books){
+void bookReturn(vector<Book> &books, vector<Customer> &customers){
 	system("cls");
-	Customer returner;
+	Customer *returner;
 	string custID;
 	cout << "Enter customer ID of returner: ";
 	cin >> custID;
-	if(!fetchCustomer(returner, books, custID))	return;
+	if(!pointToCustomer(returner,customers,custID))	return;
 
 	string bookID;
 	cout << "Enter the Book ID of the book return: ";
 	cin >> bookID;
 
-	returner.returnBook(bookID);
+	returner->returnBook(bookID);
+	updateData(customers, books);
 }
 
 //Show admin menu
-void adminFunction(Admin admin, vector<Book> &bookVector) {
+void adminFunction(Admin *admin, vector<Book> &bookVector, vector<Customer> &customerVector) {
 	int adminAction;
     do {
 		system("cls");
@@ -533,9 +512,11 @@ void adminFunction(Admin admin, vector<Book> &bookVector) {
 				editBook(bookVector);
                 break;
 			case 4:
-				bookReturn(bookVector);
+				bookReturn(bookVector, customerVector);
 				break;
 			case 5:
+				cout << "Successfully logout, Have a nice day! " << admin->getName() << endl;
+				system("pause");
 				return;
             default:
                 cout << "Please enter number between 1-5" << endl;
@@ -548,10 +529,14 @@ void adminFunction(Admin admin, vector<Book> &bookVector) {
 int main()
 {
 	vector<Book> bookVector;
+	vector<Customer> customerVector;
+	vector<Admin> adminVector;
 	int actionNum;
 	bool _loginSuccess=0;
 
 	loadBooks(bookVector);
+	loadCustomers(customerVector, bookVector);
+	loadAdmins(adminVector);
 	
 	do{
 		system("cls");
@@ -565,14 +550,14 @@ int main()
 		switch (actionNum)
 		{
 			case 1:{
-				Customer customer;
-				_loginSuccess = login(customer,bookVector);
-				if(_loginSuccess)	userFunction(customer,bookVector);
+				Customer *customer;
+				_loginSuccess = login(customer,bookVector,customerVector);
+				if(_loginSuccess)	userFunction(customer,bookVector,customerVector);
 				break;}
 			case 2:{
-				Admin admin;
-				_loginSuccess = login(admin);
-				if(_loginSuccess)	adminFunction(admin,bookVector);
+				Admin *admin;
+				_loginSuccess = login(admin, adminVector);
+				if(_loginSuccess)	adminFunction(admin,bookVector,customerVector);
 				break;}
 			case 3:
 				return 0;
