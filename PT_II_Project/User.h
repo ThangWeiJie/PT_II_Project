@@ -23,6 +23,12 @@ public:
     void setID(string);
     void setPsw(string);
     void setName(string);
+
+    //Accessors
+    string getID() const;
+    string getPsw() const;
+    string getName() const;
+
 };
 
 class Customer : public User{
@@ -38,8 +44,6 @@ public:
     Customer(string, string, string, int, vector<Book*>, vector<tm>);
 
     //Accessors
-    string getID() const;
-    string getName() const;
     int getNumBookBorrow() const;
     string borrowDetails() const;
 
@@ -54,11 +58,19 @@ public:
     void calculateOverDue();
     void print();
 
+    friend void loadCustomers(vector<Customer>&, vector<Book>&);
 };
 
 class Admin : public User{
+protected:
+    int adminLevel;
 public:
     Admin();
+    Admin(string, string, string, int);
+
+    void setAdminLvl(int);
+
+    friend void loadAdmins(vector<Admin>&);
 };
 
 #endif

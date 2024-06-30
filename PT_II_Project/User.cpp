@@ -16,6 +16,11 @@ void User::setID(string id)    {userID = id;}
 void User::setPsw(string psw)   {password = psw;}
 void User::setName(string n)    {name = n;}
 
+//Accessors
+string User::getID() const{ return userID; }
+string User::getPsw() const{ return password; }
+string User::getName() const{ return name; }
+
 
 //Derived Class Customer:
 //Constructors
@@ -27,9 +32,6 @@ Customer::Customer(string ID="", string ps="", string n="", int numBook = 0, vec
 }
 
 //Accessors
-string Customer::getID() const{ return userID; }
-string Customer::getName() const{ return name; }
-
 int Customer::getNumBookBorrow() const{ return numBookBorrow; }
 
 string Customer::borrowDetails() const{
@@ -48,6 +50,7 @@ void Customer::setNumBook(int n)    {numBookBorrow = n;}
 
 //Functions
 void Customer::borrowBook(Book *bookptr){
+    system("cls");
     if(bookptr->inventory.getInStock()<=0){
         cout << "The book is currently out of stock" << endl;
         return;
@@ -79,16 +82,27 @@ void Customer::returnBook(string bookID){
     for(int i=0; i<numBookBorrow; i++){
         if(borrowedBooks[i]->getBookID() == bookID){
             if(overDueFees[i] > 0){
-                cout << "Please pay for overDue fee: " << overDueFees[i];
-                getchar();
+                cout << "Please pay for overDue fee: RM" << overDueFees[i] << endl;
+                cout << "Payment Received?(Y/N) -> ";
+                cin.ignore();
+                char _confirm;
+                cin >> _confirm;
+                if(!(_confirm=='Y'||_confirm=='y')){
+                    cout << "Unable to return book.(Payment not received)" << endl;
+                    system("pause");
+                    return;
+                }
             }
             borrowedBooks[i]->inventory.returnBook();
             numBookBorrow -= 1;
-            borrowedBooks.erase(borrowedBooks.begin()+i);
             dueDateTm.erase(dueDateTm.begin()+i);
             dueDateString.erase(dueDateString.begin()+i);
             overDueDays.erase(overDueDays.begin()+i);
             overDueFees.erase(overDueFees.begin()+i);
+            cout << "Successfully return book:" << endl;
+            borrowedBooks[i]->print();
+            borrowedBooks.erase(borrowedBooks.begin()+i);
+            system("pause");
             break;
         }
         else if(i+1 >= numBookBorrow){
@@ -155,4 +169,8 @@ void Customer::print(){
 
 //Derived Class Admin:
 //Constructors
-Admin::Admin():User("","",""){}
+Admin::Admin():User("","",""), adminLevel(0){}
+
+Admin::Admin(string ID="", string ps="", string n="", int lvl=0) : User(ID,ps,n) , adminLevel(lvl){}
+
+void Admin::setAdminLvl(int lvl) { adminLevel = lvl; }
